@@ -486,6 +486,9 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
 
     def remove(self) -> None:
         """Remove the file from the storage."""
+        if "snakemake-workflow-sources" in self.orig_file:
+            print("Ignoring remove request for", self.file)
+            return
         msg = "Rucio does not support deleting files."
         raise NotImplementedError(msg)
 
