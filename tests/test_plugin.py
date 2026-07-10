@@ -280,5 +280,7 @@ class TestStorageWrite(TestStorageRucioBase):
     def test_path_rewriting(self, tmp_path: Path) -> None:
         """Test that forbidden characters in queries get replaced."""
         scope = SITE_CONFIG["scope"]
-        obj = self.get_storage_object(tmp_path, query=f"rucio://{scope}/path/normally/not/allowed")
+        obj = self.get_storage_object(
+            tmp_path, query=f"rucio://{scope}/path/normally/not/allowed"
+        )
         assert obj.file == "path-2F-normally-2F-not-2F-allowed"
