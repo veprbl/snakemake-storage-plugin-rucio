@@ -418,7 +418,9 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
         # Workaround downloadclient's inability to accept custom destination
         # filename by downloading to a temporary directory first and then
         # moving the file to its final destination
-        with tempfile.TemporaryDirectory(prefix="rucio_download_") as temp_dir:
+        base_dir = self.local_path().parent
+        base_dir.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix=".download_", dir=base_dir) as temp_dir:
             self.provider.dclient.download_dids(
                 [
                     {
@@ -431,7 +433,6 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
                 num_threads=1,
             )
 
-            self.local_path().parent.mkdir(parents=True, exist_ok=True)
             shutil.move(
                 os.path.join(temp_dir, self.scope, self.file),  # noqa: PTH118
                 self.local_path(),
