@@ -5,12 +5,11 @@ from __future__ import annotations
 import dataclasses
 import hashlib
 import inspect
-import os.path
 import random
 import re
-import shutil
 import tempfile
 from collections.abc import Iterable, Sequence
+from pathlib import Path
 from urllib.parse import urlparse
 
 import rucio.client
@@ -433,10 +432,7 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
                 num_threads=1,
             )
 
-            shutil.move(
-                os.path.join(temp_dir, self.scope, self.file),  # noqa: PTH118
-                self.local_path(),
-            )
+            Path(temp_dir, self.scope, self.file).replace(self.local_path())
 
     def store_object(self) -> None:
         """Upload the file."""
