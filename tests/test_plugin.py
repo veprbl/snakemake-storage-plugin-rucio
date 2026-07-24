@@ -286,10 +286,12 @@ class TestStorageWrite(TestStorageRucioBase):
         assert obj.file == "path-2F-normally-2F-not-2F-allowed"
         assert obj.local_path().name == "allowed"
 
-        obj.local_path().parent.mkdir()
+        obj.local_path().parent.mkdir(parents=True)
         obj.local_path().write_text("content")
 
         obj.store_object()
+
+        obj.local_path().unlink()
 
         obj = self.get_storage_object(
             tmp_path, query=f"rucio://{scope}/path/normally/not/allowed"
