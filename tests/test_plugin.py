@@ -94,6 +94,7 @@ class TestStorageRucioBase(TestStorageBase):
             upload_rse=SITE_CONFIG["upload_rse"],
             upload_dataset=SITE_CONFIG["upload_dataset"],
             cache_scope=False,
+            no_path_rewriting=True,
         )
 
     def get_storage_object(
@@ -179,6 +180,24 @@ class TestStorageRead(TestStorageRucioBase):
     def get_query_not_existing(self, tmp_path: Path) -> str:  # noqa: ARG002
         """Return a query that is not present in the storage."""
         return f"rucio://{SITE_CONFIG['scope']}/abc.txt"
+
+
+@pytest.mark.skipif(
+    "RUCIO_CONFIG" not in os.environ,
+    reason="requires a Rucio configuration",
+)
+class TestStorageReadNoNetLoc(TestStorageRead):
+    """Read tests for filenames that do not start with 'rucio://'."""
+
+    def get_query(self, tmp_path: Path) -> str:  # noqa: ARG002
+        """Return a query."""
+        # If retrieve_only is True, this should be a query that
+        # is present in the storage, as it will not be created.
+        return f"/{SITE_CONFIG['scope']}/{SITE_CONFIG['file']}"
+
+    def get_query_not_existing(self, tmp_path: Path) -> str:  # noqa: ARG002
+        """Return a query that is not present in the storage."""
+        return f"/{SITE_CONFIG['scope']}/abc.txt"
 
 
 class TestStorageReadWithScopeCache(TestStorageRead):
@@ -277,6 +296,26 @@ class TestStorageWrite(TestStorageRucioBase):
         assert "already exists on Rucio" not in caplog.text
         obj.store_object()
         assert "already exists on Rucio" in caplog.text
+
+
+@pytest.mark.skipif(
+    "RUCIO_CONFIG" not in os.environ,
+    reason="requires a Rucio configuration",
+)
+class TestStorageWriteWithPathRewrite(TestStorageRucioBase):
+    """Write tests with path rewriting enabled."""
+
+    def get_storage_provider_settings(
+        self,
+    ) -> StorageProviderSettingsBase:
+        """Create StorageProviderSettings of this plugin for testing."""
+        return StorageProviderSettings(
+            download_rse=SITE_CONFIG["download_rse"],
+            upload_rse=SITE_CONFIG["upload_rse"],
+            upload_dataset=SITE_CONFIG["upload_dataset"],
+            cache_scope=False,
+            no_path_rewriting=False,
+        )
 
     def test_path_rewriting(self, tmp_path: Path) -> None:
         """Test that forbidden characters in queries get replaced."""
