@@ -1,7 +1,7 @@
-[![CI](https://github.com/bouweandela/snakemake-storage-plugin-rucio/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bouweandela/snakemake-storage-plugin-rucio/actions/workflows/ci.yml?query=branch%3Amain)
-[![codecov](https://codecov.io/gh/bouweandela/snakemake-storage-plugin-rucio/graph/badge.svg?token=GRYFT0TCRQ)](https://codecov.io/gh/bouweandela/snakemake-storage-plugin-rucio)
+[![CI](https://github.com/snakemake/snakemake-storage-plugin-rucio/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/snakemake/snakemake-storage-plugin-rucio/actions/workflows/ci.yml?query=branch%3Amain)
+[![codecov](https://codecov.io/gh/snakemake/snakemake-storage-plugin-rucio/graph/badge.svg?token=GRYFT0TCRQ)](https://codecov.io/gh/snakemake/snakemake-storage-plugin-rucio)
 [![Docs](https://readthedocs.org/projects/snakemake/badge/?version=latest)](https://snakemake.github.io/snakemake-plugin-catalog/plugins/storage/rucio.html)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15657667.svg)](https://doi.org/10.5281/zenodo.15657667)
+[![DOI](https://zenodo.org/badge/1282965480.svg)](https://doi.org/10.5281/zenodo.21278367)
 
 # snakemake-storage-plugin-rucio
 

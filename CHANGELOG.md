@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.5.3](https://github.com/snakemake/snakemake-storage-plugin-rucio/compare/v0.5.2...v0.5.3) (2026-07-09)
+
+
+### Documentation
+
+* update Zenodo badge ([#9](https://github.com/snakemake/snakemake-storage-plugin-rucio/issues/9)) ([d6937a4](https://github.com/snakemake/snakemake-storage-plugin-rucio/commit/d6937a42ab48dee0b5e60d6b388f98fa7556500d))
+
+## [0.5.2](https://github.com/snakemake/snakemake-storage-plugin-rucio/compare/v0.5.1...v0.5.2) (2026-07-09)
+
+
+### Bug Fixes
+
+* Specify the plugin for get_metadata_bulk because it defaults to JSON and then the "updated_at" item is missing ([#5](https://github.com/snakemake/snakemake-storage-plugin-rucio/issues/5)) ([728291b](https://github.com/snakemake/snakemake-storage-plugin-rucio/commit/728291bc199ff756723b9ab8b6048938e07172b8))
+
+
+### Documentation
+
+* Add Dmitry Kalinkin as an author ([#7](https://github.com/snakemake/snakemake-storage-plugin-rucio/issues/7)) ([147b266](https://github.com/snakemake/snakemake-storage-plugin-rucio/commit/147b2667e0cba3699a76b029a1dcc44d14b09b11))
+* Update repo URLs ([#3](https://github.com/snakemake/snakemake-storage-plugin-rucio/issues/3)) ([e6f129e](https://github.com/snakemake/snakemake-storage-plugin-rucio/commit/e6f129ec711c7fc97818005941f89dad7582d377))
+
+## [0.5.1](https://github.com/bouweandela/snakemake-storage-plugin-rucio/compare/v0.5.0...v0.5.1) (2026-06-17)
+
+
+### Bug Fixes
+
+* correct mtime to treat rucio timestamp as utc ([#48](https://github.com/bouweandela/snakemake-storage-plugin-rucio/issues/48)) ([67bec3b](https://github.com/bouweandela/snakemake-storage-plugin-rucio/commit/67bec3ba363b6985186b5d16a8aa2298d729be3b))
+
 ## [0.5.0](https://github.com/bouweandela/snakemake-storage-plugin-rucio/compare/v0.4.3...v0.5.0) (2026-03-11)
 
 

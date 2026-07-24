@@ -24,7 +24,7 @@ authors:
     affiliation: Brookhaven National Laboratory
     email: dmitry.kalinkin+snakemake@gmail.com
 repository-code: >-
-  https://github.com/bouweandela/snakemake-storage-plugin-rucio
+  https://github.com/snakemake/snakemake-storage-plugin-rucio
 url: >-
   https://snakemake.github.io/snakemake-plugin-catalog/plugins/storage/rucio.html
 abstract: >-

@@ -4,11 +4,12 @@ build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "snakemake-storage-plugin-rucio"
-version = "0.5.0"
+version = "0.5.3"
 description = "A Snakemake storage plugin that handles files available through Rucio."
 authors = [
     { name = "Bouwe Andela", email = "b.andela@esciencecenter.nl" },
     { name = "Valentin Pestel", email = "valentinpestel@gmail.com" },
+    { name = "Dmitry Kalinkin", email = "dmitry.kalinkin+snakemake@gmail.com" },
 ]
 readme = "README.md"
 license = { text = "Apache-2.0" }
@@ -35,7 +36,7 @@ dev = [
 ]
 
 [project.urls]
-repository = "https://github.com/bouweandela/snakemake-storage-plugin-rucio"
+repository = "https://github.com/snakemake/snakemake-storage-plugin-rucio"
 documentation = "https://snakemake.github.io/snakemake-plugin-catalog/plugins/storage/rucio.html"
 
 [tool.coverage.run]

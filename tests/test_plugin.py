@@ -268,6 +268,7 @@ class TestStorageWrite(TestStorageRucioBase):
         self, tmp_path: Path, caplog: pytest.LogCaptureFixture
     ) -> None:
         """Test that uploading the same file second time is detected."""
+        caplog.set_level("DEBUG")
         obj = self.get_storage_object(tmp_path)
         obj.local_path().parent.mkdir()
         obj.local_path().write_text("content")
