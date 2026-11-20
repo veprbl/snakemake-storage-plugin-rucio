@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import json
 import os
+from argparse import ArgumentParser
 from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest
+from snakemake_interface_storage_plugins.registry import StoragePluginRegistry
 from snakemake_interface_storage_plugins.settings import StorageProviderSettingsBase
 from snakemake_interface_storage_plugins.storage_provider import (
     StorageProviderBase,
@@ -19,6 +21,7 @@ from snakemake_storage_plugin_rucio import (
     StorageObject,
     StorageProvider,
     StorageProviderSettings,
+    _parse_optional,
 )
 
 
@@ -337,3 +340,50 @@ class TestStorageWriteWithPathRewrite(TestStorageRucioBase):
             tmp_path, query=f"rucio://{scope}/path/normally/not/allowed"
         )
         assert obj.exists()
+
+
+@pytest.mark.parametrize(
+    ("value", "annotation", "expected"),
+    [
+        ("600", int | None, 600),
+        (None, int | None, None),
+        ("mock", str | None, "mock"),
+        (600, int | None, 600),
+    ],
+)
+def test_parse_optional(
+    value: str | int | None, annotation: object, expected: object
+) -> None:
+    """Test casting of CLI strings back to Optional inner types."""
+    assert _parse_optional(value, annotation) == expected
+
+
+@pytest.mark.skipif(
+    "RUCIO_CONFIG" not in os.environ,
+    reason="requires a Rucio configuration",
+)
+def test_settings_timeout_is_int(tmp_path: Path) -> None:
+    """Test that a CLI timeout string is cast to int before reaching the client.
+
+    Snakemake parses ``--storage-rucio-timeout`` as a string. Without the
+    ``parse_func`` metadata, the string reaches ``rucio.client.Client`` and
+    every request fails with ``ValueError: Timeout value connect was 600,
+    but it must be an int, float or None.`` (the first request happens when
+    the provider checks whether an object exists).
+
+    The test goes through the storage plugin registry, i.e. the same path
+    snakemake takes when parsing its command line.
+    """
+    registry = StoragePluginRegistry()
+    plugin = registry.get_plugin("rucio")
+    parser = ArgumentParser()
+    plugin.register_cli_args(parser, registry.get_plugin_type())
+    args = parser.parse_args(["--storage-rucio-timeout", "600"])
+    settings = plugin.get_settings(args)
+
+    provider = StorageProvider(
+        logger=logger,
+        local_prefix=tmp_path / "local_prefix",
+        settings=settings,
+    )
+    assert provider.client.timeout == 600

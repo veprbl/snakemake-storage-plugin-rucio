@@ -9,6 +9,7 @@ import inspect
 import random
 import re
 import tempfile
+import typing
 from collections.abc import Iterable, Sequence
 from pathlib import Path
 from urllib.parse import urlparse
@@ -53,6 +54,21 @@ from . import rucio_quote
 _RUCIO_CLIENT_CLS = rucio.client.baseclient.BaseClient
 
 
+def _parse_optional(value: typing.Any, annotation: typing.Any) -> typing.Any:
+    """Cast a CLI string back to the inner type of an Optional annotation.
+
+    Snakemake parses storage plugin settings as strings. The plugin registry
+    casts them back for plain-type fields, but not for Union-annotated ones
+    (like ``Optional[int]``), so the raw string would end up in the Rucio
+    client where urllib3 rejects it (``ValueError: Timeout value connect was
+    600, but it must be an int, float or None.``).
+    """
+    inner = typing.get_args(annotation)
+    if value is None or (inner and isinstance(value, inner[0])):
+        return value
+    return inner[0](value) if inner else value
+
+
 def _get_help(arg: str) -> str:
     """Read the help text for a Rucio client argument."""
     doc = _RUCIO_CLIENT_CLS.__init__.__doc__
@@ -71,7 +87,14 @@ StorageProviderSettings = dataclasses.make_dataclass(
             f.annotation,
             dataclasses.field(
                 default=f.default,
-                metadata={"help": _get_help(f.name)},
+                metadata={
+                    "help": _get_help(f.name),
+                    # storage plugins support tagged values, so snakemake
+                    # parses every CLI value as str; cast back to the
+                    # client's type here (e.g. Optional[int] timeout)
+                    "parse_func": (lambda v, _t=f.annotation: _parse_optional(v, _t)),
+                    "unparse_func": lambda v: v,
+                },
             ),
         )
         for f in inspect.signature(_RUCIO_CLIENT_CLS).parameters.values()
